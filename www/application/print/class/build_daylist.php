@@ -25,7 +25,7 @@
 		public $y;
 		
 		
-		function print_build_daylist_class( $data )
+		function __construct($data )
 		{
 			$this->data = $data;
 		}
@@ -53,7 +53,7 @@
 		
 		function overview( $pdf )
 		{
-			$row_num = count( $data->subcamp ) + count( $data->day );
+			$row_num = count( $this->data->subcamp ) + count( $this->data->day );
 			
 			foreach( $this->data->subcamp as $subcamp )
 			{
@@ -68,9 +68,7 @@
 				
 				$pdf->drawTextBox( $subcamp_str, 190, 10, 'L', 'M', 0 );
 				$this->y += 12;
-				
-				
-				
+
 				$pdf->SetFont( '', 'B', 12 );
 				
 				foreach( $subcamp->get_sorted_day() as $day )
@@ -84,7 +82,6 @@
 					$pdf->Link( 6, $this->y, 198, 8, $day->get_linker( $pdf ) );
 					
 					$day->set_marker( $this->y );
-					
 					
 					$c_date = new c_date();
 					
