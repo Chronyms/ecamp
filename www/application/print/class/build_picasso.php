@@ -46,7 +46,6 @@
 			
 			foreach( $this->data->subcamp as $subcamp )
 			{
-				
 				$start_row 	= 1;
 				$end_row	= $this->get_number_of_rows( $subcamp, 1 );
 				
@@ -54,7 +53,7 @@
 				{
 					$pdf->AddPage( $this->orientation, 'A4' );
 					
-					( $top_level_picasso != "printed" && $top_level_picasso = "printed" ) && $pdf->Bookmark( 'Picasso', 0, 0 );
+					$pdf->Bookmark( 'Picasso', 0, 0 );
 										
 					$this->title( $pdf );
 					$this->background( $pdf );
