@@ -67,4 +67,3 @@ class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
         $codewriter->recycleTempVariable($this->tmp_var);
     }
 }
-

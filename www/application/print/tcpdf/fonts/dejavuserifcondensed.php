@@ -301,4 +301,3 @@ $diff='';
 $file='dejavuserifcondensed.z';
 $ctg='dejavuserifcondensed.ctg.z';
 $originalsize=279408;
-?>

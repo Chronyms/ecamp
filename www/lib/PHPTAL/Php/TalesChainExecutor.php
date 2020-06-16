@@ -66,7 +66,8 @@ class PHPTAL_Php_TalesChainExecutor
     {
         $this->codewriter->noThrow(true);
 
-        end($this->_chain); $lastkey = key($this->_chain);
+        end($this->_chain);
+        $lastkey = key($this->_chain);
 
         foreach ($this->_chain as $key => $exp) {
             $this->_state = 0;
@@ -79,10 +80,12 @@ class PHPTAL_Php_TalesChainExecutor
                 $this->_reader->talesChainPart($this, $exp, $lastkey === $key);
             }
 
-            if ($this->_state == self::CHAIN_BREAK)
+            if ($this->_state == self::CHAIN_BREAK) {
                 break;
-            if ($this->_state == self::CHAIN_CONT)
+            }
+            if ($this->_state == self::CHAIN_CONT) {
                 continue;
+            }
         }
 
         $this->codewriter->doEnd('if');

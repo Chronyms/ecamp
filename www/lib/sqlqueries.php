@@ -19,9 +19,9 @@
  */
 
 
-  function getQueryEventNr( $camp_id )
+  function getQueryEventNr($camp_id)
   {
-	$query = "
+      $query = "
 
 	select 
 		`event`.`id` AS `event_id`,
@@ -78,8 +78,5 @@
 		and subcamp.camp_id=$camp_id
 	)
 	";
-  	return $query;
+      return $query;
   }
-
-
-?>

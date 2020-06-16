@@ -309,4 +309,3 @@ $diff='';
 $file='freesans.z';
 $ctg='freesans.ctg.z';
 $originalsize=830728;
-?>

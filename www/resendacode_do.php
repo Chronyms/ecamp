@@ -18,40 +18,37 @@
  * along with eCamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-	include("./config/config.php");
-	include($lib_dir . "/mysql.php");
-	include($lib_dir . "/functions/mail.php");
-	db_connect();
+    include("./config/config.php");
+    include($lib_dir . "/mysql.php");
+    include($lib_dir . "/functions/mail.php");
+    db_connect();
 
-	$login = mysqli_real_escape_string($GLOBALS["___mysqli_ston"],  $_REQUEST[ 'Login' ] );
+    $login = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_REQUEST[ 'Login' ]);
 
-	$query = "	SELECT id, active, acode FROM user WHERE mail = '$login'";
-	$result = mysqli_query($GLOBALS["___mysqli_ston"],  $query );
-	
-	if( ! mysqli_num_rows( $result ) )
-	{
-		header( "location: login.php?msg=Angegebene Mailadresse ist nicht registriert!" );
-		die();
-	}
-	
-	$active = mysqli_result( $result,  0,  'active' );
-	if( $active )
-	{
-		header( "location: login.php?msg=Account ist bereits aktiviert!<br /> Du kannst dich einloggen!" );
-		die();
-	}
-	
-	$user_id = mysqli_result( $result,  0,  'id' );
-	$acode 	= mysqli_result( $result,  0,  'acode' );
-	if( $acode == "" )
-	{
-		$acode = md5( microtime() );
-		$query = "UPDATE user SET acode = '$acode' WHERE id = ". $user_id;
-		mysqli_query($GLOBALS["___mysqli_ston"],  $query );
-	}
-	
-	//	SEND MAIL FOR ACTIVATION:
-	// ===========================
+    $query = "	SELECT id, active, acode FROM user WHERE mail = '$login'";
+    $result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    
+    if (! mysqli_num_rows($result)) {
+        header("location: login.php?msg=Angegebene Mailadresse ist nicht registriert!");
+        die();
+    }
+    
+    $active = mysqli_result($result, 0, 'active');
+    if ($active) {
+        header("location: login.php?msg=Account ist bereits aktiviert!<br /> Du kannst dich einloggen!");
+        die();
+    }
+    
+    $user_id = mysqli_result($result, 0, 'id');
+    $acode 	= mysqli_result($result, 0, 'acode');
+    if ($acode == "") {
+        $acode = md5(microtime());
+        $query = "UPDATE user SET acode = '$acode' WHERE id = ". $user_id;
+        mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    }
+    
+    //	SEND MAIL FOR ACTIVATION:
+    // ===========================
 $text = <<<___MAILBODY
 <table width="100%">
     <tbody>
@@ -101,14 +98,14 @@ $text = <<<___MAILBODY
 </table>
 ___MAILBODY;
 
- 	ecamp_send_mail($login, "eCamp - Willkommen", $text);
-	//mail( $login, "eCamp - Willkommen", $text, "From: eCamp Pfadi Luzern <ecamp@pfadiluzern.ch>" );
-	
-	/*
-	$text = urlencode( $text );
- 	$subject = urlencode( "eCamp - Passwort ändern" );
-	fopen( "http://ecamp2.pfadiluzern.ch/mail.php?to=$login&subject=$subject&message=$text", "r" );
-	*/
-	
-	header( 'location: login.php?msg=Überprüfe nun bitte deine Mailbox.' );
-	die();
+    ecamp_send_mail($login, "eCamp - Willkommen", $text);
+    //mail( $login, "eCamp - Willkommen", $text, "From: eCamp Pfadi Luzern <ecamp@pfadiluzern.ch>" );
+    
+    /*
+    $text = urlencode( $text );
+    $subject = urlencode( "eCamp - Passwort ändern" );
+    fopen( "http://ecamp2.pfadiluzern.ch/mail.php?to=$login&subject=$subject&message=$text", "r" );
+    */
+    
+    header('location: login.php?msg=Überprüfe nun bitte deine Mailbox.');
+    die();

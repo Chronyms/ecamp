@@ -57,9 +57,9 @@ class PHPTAL_RepeatController implements Iterator
      */
     public function __construct($source)
     {
-        if ( is_string($source) ) {
-            $this->iterator = new ArrayIterator( str_split($source) );  // FIXME: invalid for UTF-8 encoding, use preg_match_all('/./u') trick
-        } elseif ( is_array($source) ) {
+        if (is_string($source)) {
+            $this->iterator = new ArrayIterator(str_split($source));  // FIXME: invalid for UTF-8 encoding, use preg_match_all('/./u') trick
+        } elseif (is_array($source)) {
             $this->iterator = new ArrayIterator($source);
         } elseif ($source instanceof IteratorAggregate) {
             $this->iterator = $source->getIterator();
@@ -74,11 +74,11 @@ class PHPTAL_RepeatController implements Iterator
         } elseif ($source instanceof Traversable) {
             $this->iterator = new IteratorIterator($source);
         } elseif ($source instanceof Closure) {
-            $this->iterator = new ArrayIterator( (array) $source() );
+            $this->iterator = new ArrayIterator((array) $source());
         } elseif ($source instanceof stdClass) {
-            $this->iterator = new ArrayIterator( (array) $source );
+            $this->iterator = new ArrayIterator((array) $source);
         } else {
-            $this->iterator = new ArrayIterator( array() );
+            $this->iterator = new ArrayIterator(array());
         }
     }
 
@@ -120,19 +120,18 @@ class PHPTAL_RepeatController implements Iterator
         if ($this->length === null) {
             if ($this->iterator instanceof Countable) {
                 return $this->length = count($this->iterator);
-            } elseif ( is_object($this->iterator) ) {
+            } elseif (is_object($this->iterator)) {
                 // for backwards compatibility with existing PHPTAL templates
-                if ( method_exists($this->iterator, 'size') ) {
+                if (method_exists($this->iterator, 'size')) {
                     return $this->length = $this->iterator->size();
-                } elseif ( method_exists($this->iterator, 'length') ) {
+                } elseif (method_exists($this->iterator, 'length')) {
                     return $this->length = $this->iterator->length();
                 }
             }
             $this->length = '_PHPTAL_LENGTH_UNKNOWN_';
         }
 
-        if ($this->length === '_PHPTAL_LENGTH_UNKNOWN_') // return length if end is discovered
-        {
+        if ($this->length === '_PHPTAL_LENGTH_UNKNOWN_') { // return length if end is discovered
             return $this->end ? $this->index + 1 : null;
         }
         return $this->length;
@@ -173,7 +172,9 @@ class PHPTAL_RepeatController implements Iterator
         $this->index++;
 
         // Prefetch the next element
-        if ($this->validOnNext) $this->prefetch();
+        if ($this->validOnNext) {
+            $this->prefetch();
+        }
 
         if ($this->uses_groups) {
             // Notify the grouping helper of the change
@@ -213,13 +214,13 @@ class PHPTAL_RepeatController implements Iterator
             case 'length':
                 return $this->length();
             case 'letter':
-                return strtolower( $this->int2letter($this->index+1) );
+                return strtolower($this->int2letter($this->index+1));
             case 'Letter':
-                return strtoupper( $this->int2letter($this->index+1) );
+                return strtoupper($this->int2letter($this->index+1));
             case 'roman':
-                return strtolower( $this->int2roman($this->index+1) );
+                return strtolower($this->int2roman($this->index+1));
             case 'Roman':
-                return strtoupper( $this->int2roman($this->index+1) );
+                return strtoupper($this->int2roman($this->index+1));
 
             case 'groups':
                 $this->initializeGroups();
@@ -234,7 +235,7 @@ class PHPTAL_RepeatController implements Iterator
             case 'last':
                 $this->initializeGroups();
                 // Compare the next one with the dictionary
-                $res = $this->groups->last( $this->iterator->current() );
+                $res = $this->groups->last($this->iterator->current());
                 return is_bool($res) ? $res : $this->groups;
 
             default:
@@ -255,7 +256,7 @@ class PHPTAL_RepeatController implements Iterator
         $this->key = $this->iterator->key();
 
         $this->iterator->next();
-        if ( !$this->iterator->valid() ) {
+        if (!$this->iterator->valid()) {
             $this->valid = false;
             $this->end = true;
         }
@@ -320,4 +321,3 @@ class PHPTAL_RepeatController implements Iterator
         return $roman;
     }
 }
-

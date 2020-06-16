@@ -42,13 +42,19 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
     {
         $macroname = strtr(trim($this->expression), '-', '_');
         if (!preg_match('/^[a-z0-9_]+$/i', $macroname)) {
-            throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"',
-                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
+            throw new PHPTAL_ParserException(
+                'Bad macro name "'.$macroname.'"',
+                $this->phpelement->getSourceFile(),
+                $this->phpelement->getSourceLine()
+            );
         }
 
         if ($codewriter->functionExists($macroname)) {
-            throw new PHPTAL_TemplateException("Macro $macroname is defined twice",
-                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
+            throw new PHPTAL_TemplateException(
+                "Macro $macroname is defined twice",
+                $this->phpelement->getSourceFile(),
+                $this->phpelement->getSourceLine()
+            );
         }
 
         $codewriter->doFunction($macroname, 'PHPTAL $_thistpl, PHPTAL $tpl');
@@ -64,4 +70,3 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
         $codewriter->doEnd('function');
     }
 }
-

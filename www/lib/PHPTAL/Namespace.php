@@ -21,7 +21,8 @@
  */
 abstract class PHPTAL_Namespace
 {
-    private $prefix, $namespace_uri;
+    private $prefix;
+    private $namespace_uri;
     protected $_attributes;
 
     public function __construct($prefix, $namespace_uri)

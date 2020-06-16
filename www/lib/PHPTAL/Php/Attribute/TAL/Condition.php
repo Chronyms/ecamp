@@ -30,9 +30,7 @@
  * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Condition
-extends PHPTAL_Php_Attribute
-implements PHPTAL_Php_TalesChainReader
+class PHPTAL_Php_Attribute_TAL_Condition extends PHPTAL_Php_Attribute implements PHPTAL_Php_TalesChainReader
 {
     private $expressions = array();
 
@@ -70,7 +68,7 @@ implements PHPTAL_Php_TalesChainReader
 
         if ($islast) {
             // for the last one in the chain build a ORed condition
-            $executor->getCodeWriter()->doIf( implode(' || ', $this->expressions ) );
+            $executor->getCodeWriter()->doIf(implode(' || ', $this->expressions));
             // The executor will always end an if so we output a dummy if
             $executor->doIf('false');
         }
@@ -85,9 +83,10 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
-        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions',
-                    $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
+        throw new PHPTAL_ParserException(
+            '\'default\' keyword not allowed on conditional expressions',
+            $this->phpelement->getSourceFile(),
+            $this->phpelement->getSourceLine()
+        );
     }
-
 }
-

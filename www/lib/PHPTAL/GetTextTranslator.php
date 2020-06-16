@@ -34,7 +34,9 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 
     public function __construct()
     {
-        if (!function_exists('gettext')) throw new PHPTAL_ConfigurationException("Gettext not installed");
+        if (!function_exists('gettext')) {
+            throw new PHPTAL_ConfigurationException("Gettext not installed");
+        }
         $this->useDomain("messages"); // PHP bug #21965
     }
 
@@ -75,11 +77,15 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         $langs = func_get_args();
 
         $langCode = $this->trySettingLanguages(LC_ALL, $langs);
-        if ($langCode) return $langCode;
+        if ($langCode) {
+            return $langCode;
+        }
 
         if (defined("LC_MESSAGES")) {
             $langCode = $this->trySettingLanguages(LC_MESSAGES, $langs);
-            if ($langCode) return $langCode;
+            if ($langCode) {
+                return $langCode;
+            }
         }
 
         throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');
@@ -142,7 +148,9 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
      */
     public function translate($key, $htmlencode=true)
     {
-        if ($this->_canonicalize) $key = self::_canonicalizeKey($key);
+        if ($this->_canonicalize) {
+            $key = self::_canonicalizeKey($key);
+        }
 
         $value = gettext($key);
 
@@ -180,4 +188,3 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         return $result;
     }
 }
-

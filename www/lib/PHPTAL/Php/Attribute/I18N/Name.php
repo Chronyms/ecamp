@@ -44,4 +44,3 @@ class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
         $codewriter->pushCode($codewriter->getTranslatorReference().'->setVar('.$codewriter->str($this->expression).', ob_get_clean())');
     }
 }
-

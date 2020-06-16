@@ -29,4 +29,3 @@ class PHPTAL_Namespace_I18N extends PHPTAL_Namespace_Builtin
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('domain', 3));
     }
 }
-

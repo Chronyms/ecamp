@@ -14,7 +14,7 @@
 
 class PHPTAL_PreFilter_StripComments extends PHPTAL_PreFilter
 {
-    function filterDOM(PHPTAL_Dom_Element $element)
+    public function filterDOM(PHPTAL_Dom_Element $element)
     {
         $defs = PHPTAL_Dom_Defs::getInstance();
 
@@ -26,7 +26,7 @@ class PHPTAL_PreFilter_StripComments extends PHPTAL_PreFilter
                 } else {
                     $node->parentNode->removeChild($node);
                 }
-            } else if ($node instanceof PHPTAL_Dom_Element) {
+            } elseif ($node instanceof PHPTAL_Dom_Element) {
                 $this->filterDOM($node);
             }
         }

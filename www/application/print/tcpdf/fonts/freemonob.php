@@ -167,4 +167,3 @@ $diff='';
 $file='freemonob.z';
 $ctg='freemonob.ctg.z';
 $originalsize=139624;
-?>

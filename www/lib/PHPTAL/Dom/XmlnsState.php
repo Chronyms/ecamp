@@ -34,8 +34,12 @@ class PHPTAL_Dom_XmlnsState
 
     public function prefixToNamespaceURI($prefix)
     {
-        if ($prefix === 'xmlns') return 'http://www.w3.org/2000/xmlns/';
-        if ($prefix === 'xml') return 'http://www.w3.org/XML/1998/namespace';
+        if ($prefix === 'xmlns') {
+            return 'http://www.w3.org/2000/xmlns/';
+        }
+        if ($prefix === 'xml') {
+            return 'http://www.w3.org/XML/1998/namespace';
+        }
 
         // domdefs provides fallback for all known phptal ns
         if (isset($this->prefix_to_uri[$prefix])) {
@@ -76,7 +80,10 @@ class PHPTAL_Dom_XmlnsState
                 $prefix_to_uri[$prefix] = $value;
             }
 
-            if ($qname == 'xmlns') {$changed=true;$current_default = $value;}
+            if ($qname == 'xmlns') {
+                $changed=true;
+                $current_default = $value;
+            }
         }
 
         if ($changed) {
@@ -86,10 +93,11 @@ class PHPTAL_Dom_XmlnsState
         }
     }
 
-    function getCurrentDefaultNamespaceURI()
+    public function getCurrentDefaultNamespaceURI()
     {
         return $this->current_default;
     }
 
-    private $prefix_to_uri, $current_default;
+    private $prefix_to_uri;
+    private $current_default;
 }

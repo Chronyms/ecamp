@@ -19,13 +19,11 @@
  */
 
 
-  function error_message( $msg )
+  function error_message($msg)
   {
-  		echo $msg;
-  		
-  		echo "<br><br>";
-  		echo "<a href='javascript:history.back()'>Zurück</a>";
-		exit;
+      echo $msg;
+        
+      echo "<br><br>";
+      echo "<a href='javascript:history.back()'>Zurück</a>";
+      exit;
   }
-
-?>

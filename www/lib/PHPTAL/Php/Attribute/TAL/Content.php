@@ -29,9 +29,7 @@
  * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Content
-extends PHPTAL_Php_Attribute
-implements PHPTAL_Php_TalesChainReader
+class PHPTAL_Php_Attribute_TAL_Content extends PHPTAL_Php_Attribute implements PHPTAL_Php_TalesChainReader
 {
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {

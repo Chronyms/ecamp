@@ -149,4 +149,3 @@ $diff='';
 $file='freesansbi.z';
 $ctg='freesansbi.ctg.z';
 $originalsize=113516;
-?>

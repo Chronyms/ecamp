@@ -17,12 +17,12 @@
  */
 class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
 {
-    function filter($src)
+    public function filter($src)
     {
         return str_replace("\r\n", "\n", $src);
     }
 
-    function filterDOM(PHPTAL_Dom_Element $root)
+    public function filterDOM(PHPTAL_Dom_Element $root)
     {
         // let xml:space=preserve preserve attributes as well
         if ($root->getAttributeNS("http://www.w3.org/XML/1998/namespace", 'space') == 'preserve') {
@@ -48,9 +48,9 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
 
                 if ('' === $norm) {
                     $root->removeChild($node);
-                } else if ($lastTextNode) {
+                } elseif ($lastTextNode) {
                     // "foo " . " bar" gives 2 spaces.
-                    $norm = $lastTextNode->getValueEscaped().ltrim($norm,' ');
+                    $norm = $lastTextNode->getValueEscaped().ltrim($norm, ' ');
 
                     $lastTextNode->setValueEscaped($norm); // assumes all nodes use same encoding (they do)
                     $root->removeChild($node);
@@ -76,7 +76,9 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     protected function findElementToFilter(PHPTAL_Dom_Element $root)
     {
         foreach ($root->childNodes as $node) {
-            if (!$node instanceof PHPTAL_Dom_Element) continue;
+            if (!$node instanceof PHPTAL_Dom_Element) {
+                continue;
+            }
 
             if ($node->getAttributeNS("http://www.w3.org/XML/1998/namespace", 'space') == 'default') {
                 $this->filterDOM($node);
@@ -99,7 +101,9 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
         foreach ($element->getAttributeNodes() as $attrnode) {
 
             // skip replaced attributes (because getValueEscaped on them is meaningless)
-            if ($attrnode->getReplacedState() !== PHPTAL_Dom_Attr::NOT_REPLACED) continue;
+            if ($attrnode->getReplacedState() !== PHPTAL_Dom_Attr::NOT_REPLACED) {
+                continue;
+            }
 
             $val = $this->normalizeSpace($attrnode->getValueEscaped(), $attrnode->getEncoding());
             $attrnode->setValueEscaped(trim($val, ' '));

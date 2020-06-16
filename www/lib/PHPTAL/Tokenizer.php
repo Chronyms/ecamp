@@ -14,11 +14,15 @@
 
 class PHPTAL_Tokenizer
 {
-    private $regex, $names, $offset, $str;
+    private $regex;
+    private $names;
+    private $offset;
+    private $str;
 
-    private $current_token, $current_value;
+    private $current_token;
+    private $current_value;
 
-    function __construct($str, array $tokens)
+    public function __construct($str, array $tokens)
     {
         $this->offset = 0;
         $this->str = $str;
@@ -29,17 +33,19 @@ class PHPTAL_Tokenizer
         $this->names[] = 'OTHER';
     }
 
-    function eof()
+    public function eof()
     {
         return $this->offset >= $this->end;
     }
 
-    function skipSpace()
+    public function skipSpace()
     {
-        while ($this->current_token === 'SPACE') $this->nextToken();
+        while ($this->current_token === 'SPACE') {
+            $this->nextToken();
+        }
     }
 
-    function nextToken()
+    public function nextToken()
     {
         if ($this->offset >= $this->end) {
             $this->current_value = null;
@@ -47,7 +53,9 @@ class PHPTAL_Tokenizer
         }
 
         //if (!preg_match_all($this->regex, $this->str, $m, PREG_SET_ORDER, $this->offset)) throw new Exception("FAIL {$this->regex} at {$this->offset}");
-        if (!preg_match($this->regex, $this->str, $m, null, $this->offset)) throw new Exception("FAIL {$this->regex} didn't match '{$this->str}' at {$this->offset}");
+        if (!preg_match($this->regex, $this->str, $m, null, $this->offset)) {
+            throw new Exception("FAIL {$this->regex} didn't match '{$this->str}' at {$this->offset}");
+        }
 
         $this->offset += strlen($m[0]); // in bytes
 
@@ -57,12 +65,12 @@ class PHPTAL_Tokenizer
         return $this->current_token;
     }
 
-    function token()
+    public function token()
     {
         return $this->current_token;
     }
 
-    function tokenValue()
+    public function tokenValue()
     {
         return $this->current_value;
     }

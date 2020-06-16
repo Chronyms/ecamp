@@ -63,15 +63,17 @@ class PHPTAL_Php_Transformer
 
 
         for ($i = 0; $i <= $len; $i++) {
-            if ($i == $len) $c = "\0";
-            else $c = $str[$i];
+            if ($i == $len) {
+                $c = "\0";
+            } else {
+                $c = $str[$i];
+            }
 
             switch ($state) {
 
                 // after whitespace a variable-variable may start, ${var} → $ctx->{$ctx->var}
                 case self::ST_WHITE:
-                    if ($c === '$' && $i+1 < $len && $str[$i+1] === '{')
-                    {
+                    if ($c === '$' && $i+1 < $len && $str[$i+1] === '{') {
                         $result .= $prefix;
                         $state = self::ST_NONE;
                         continue;
@@ -79,15 +81,14 @@ class PHPTAL_Php_Transformer
                     /* NO BREAK - ST_WHITE is almost the same as ST_NONE */
 
                 // no specific state defined, just eat char and see what to do with it.
+                // no break
                 case self::ST_NONE:
                     // begin of eval without {
                     if ($c === '$' && $i+1 < $len && self::isAlpha($str[$i+1])) {
                         $state = self::ST_EVAL;
                         $mark = $i+1;
                         $result .= $prefix.'{';
-                    }
-                    elseif (self::isDigit($c))
-                    {
+                    } elseif (self::isDigit($c)) {
                         $state = self::ST_NUM;
                         $mark = $i;
                     }
@@ -126,8 +127,7 @@ class PHPTAL_Php_Transformer
                     elseif ($c === '@') {
                         $state = self::ST_DEFINE;
                         $mark = $i+1;
-                    }
-                    elseif (ctype_space($c)) {
+                    } elseif (ctype_space($c)) {
                         $state = self::ST_WHITE;
                         $result .= $c;
                     }
@@ -276,7 +276,10 @@ class PHPTAL_Php_Transformer
                     // end of var member var, begin of new member
                     elseif ($c === '.') {
                         $result .= substr($str, $mark, $i-$mark);
-                        if ($eval) { $result .='}'; $eval = false; }
+                        if ($eval) {
+                            $result .='}';
+                            $eval = false;
+                        }
                         $result .= '->';
                         $mark = $i+1;
                         $state = self::ST_MEMBER;
@@ -284,24 +287,33 @@ class PHPTAL_Php_Transformer
                     // begin of static access
                     elseif ($c === ':') {
                         $result .= substr($str, $mark, $i-$mark+1);
-                        if ($eval) { $result .='}'; $eval = false; }
+                        if ($eval) {
+                            $result .='}';
+                            $eval = false;
+                        }
                         $state = self::ST_STATIC;
                         break;
                     }
                     // the member is a method or an array
                     elseif ($c === '(' || $c === '[') {
                         $result .= substr($str, $mark, $i-$mark+1);
-                        if ($eval) { $result .='}'; $eval = false; }
+                        if ($eval) {
+                            $result .='}';
+                            $eval = false;
+                        }
                         $state = self::ST_NONE;
                     }
                     // regular end of member, it is a var
                     else {
                         $var = substr($str, $mark, $i-$mark);
-                        if ($var !== '' && !preg_match('/^[a-z][a-z0-9_\x7f-\xff]*$/i',$var)) {
+                        if ($var !== '' && !preg_match('/^[a-z][a-z0-9_\x7f-\xff]*$/i', $var)) {
                             throw new PHPTAL_ParserException("Invalid field name '$var' in expression php:$str");
                         }
                         $result .= $var;
-                        if ($eval) { $result .='}'; $eval = false; }
+                        if ($eval) {
+                            $result .='}';
+                            $eval = false;
+                        }
                         $state = self::ST_NONE;
                         $i--;
                     }
@@ -377,7 +389,9 @@ class PHPTAL_Php_Transformer
         $result = trim($result);
 
         // CodeWriter doesn't like expressions that look like blocks
-        if ($result[strlen($result)-1] === '}') return '('.$result.')';
+        if ($result[strlen($result)-1] === '}') {
+            return '('.$result.')';
+        }
 
         return $result;
     }
@@ -415,4 +429,3 @@ class PHPTAL_Php_Transformer
         'eq'  => '==',
     );
 }
-

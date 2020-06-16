@@ -15,7 +15,7 @@
 class PHPTAL_ExceptionHandler
 {
     private $encoding;
-    function __construct($encoding)
+    public function __construct($encoding)
     {
         $this->encoding = $encoding;
     }
@@ -37,7 +37,7 @@ class PHPTAL_ExceptionHandler
         if (PHP_SAPI !== 'cli' && !headers_sent()) {
             $old_exception_handler = set_exception_handler(array(new PHPTAL_ExceptionHandler($encoding), '_defaultExceptionHandler'));
 
-            if ($old_exception_handler !== NULL) {
+            if ($old_exception_handler !== null) {
                 restore_exception_handler(); // if there's user's exception handler, let it work
             }
         }

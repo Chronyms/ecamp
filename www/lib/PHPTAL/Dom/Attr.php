@@ -21,7 +21,10 @@
  */
 class PHPTAL_Dom_Attr
 {
-    private $value_escaped, $qualified_name, $namespace_uri, $encoding;
+    private $value_escaped;
+    private $qualified_name;
+    private $namespace_uri;
+    private $encoding;
     /**
      * attribute's value can be overriden with a variable
      */
@@ -38,7 +41,7 @@ class PHPTAL_Dom_Attr
      * @param string $value_escaped value with HTML-escaping
      * @param string $encoding character encoding used by the value
      */
-    function __construct($qualified_name, $namespace_uri, $value_escaped, $encoding)
+    public function __construct($qualified_name, $namespace_uri, $value_escaped, $encoding)
     {
         $this->value_escaped = $value_escaped;
         $this->qualified_name = $qualified_name;
@@ -57,7 +60,7 @@ class PHPTAL_Dom_Attr
     /**
      * get full namespace URI. "" for default namespace.
      */
-    function getNamespaceURI()
+    public function getNamespaceURI()
     {
         return $this->namespace_uri;
     }
@@ -65,7 +68,7 @@ class PHPTAL_Dom_Attr
     /**
      * get attribute name including namespace prefix, if any
      */
-    function getQualifiedName()
+    public function getQualifiedName()
     {
         return $this->qualified_name;
     }
@@ -73,7 +76,7 @@ class PHPTAL_Dom_Attr
     /**
      * get "foo" of "ns:foo" attribute name
      */
-    function getLocalName()
+    public function getLocalName()
     {
         $n = explode(':', $this->qualified_name, 2);
         return end($n);
@@ -84,7 +87,7 @@ class PHPTAL_Dom_Attr
      *
      * @return bool
      */
-    function isNamespaceDeclaration()
+    public function isNamespaceDeclaration()
     {
         return preg_match('/^xmlns(?:$|:)/', $this->qualified_name);
     }
@@ -95,7 +98,7 @@ class PHPTAL_Dom_Attr
      *
      * @return string
      */
-    function getValue()
+    public function getValue()
     {
         return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);
     }
@@ -103,7 +106,7 @@ class PHPTAL_Dom_Attr
     /**
      * set plain text as value
      */
-    function setValue($val)
+    public function setValue($val)
     {
         $this->value_escaped = htmlspecialchars($val, ENT_QUOTES, $this->encoding);
     }
@@ -115,7 +118,7 @@ class PHPTAL_Dom_Attr
      * @see getReplacedState()
      * @see overwriteValueWithVariable()
      */
-    function getValueEscaped()
+    public function getValueEscaped()
     {
         return $this->value_escaped;
     }
@@ -126,7 +129,7 @@ class PHPTAL_Dom_Attr
      *
      * @param string $value_escaped new content
      */
-    function setValueEscaped($value_escaped)
+    public function setValueEscaped($value_escaped)
     {
         $this->replacedState = self::NOT_REPLACED;
         $this->value_escaped = $value_escaped;
@@ -143,7 +146,7 @@ class PHPTAL_Dom_Attr
     /**
      * hide this attribute. It won't be generated.
      */
-    function hide()
+    public function hide()
     {
         $this->replacedState = self::HIDDEN;
     }
@@ -151,7 +154,7 @@ class PHPTAL_Dom_Attr
     /**
      * generate value of this attribute from variable
      */
-    function overwriteValueWithVariable($phpVariable)
+    public function overwriteValueWithVariable($phpVariable)
     {
         $this->replacedState = self::VALUE_REPLACED;
         $this->phpVariable = $phpVariable;
@@ -161,7 +164,7 @@ class PHPTAL_Dom_Attr
     /**
      * generate complete syntax of this attribute using variable
      */
-    function overwriteFullWithVariable($phpVariable)
+    public function overwriteFullWithVariable($phpVariable)
     {
         $this->replacedState = self::FULLY_REPLACED;
         $this->phpVariable = $phpVariable;
@@ -171,7 +174,7 @@ class PHPTAL_Dom_Attr
     /**
      * use any PHP code to generate this attribute's value
      */
-    function overwriteValueWithCode($code)
+    public function overwriteValueWithCode($code)
     {
         $this->replacedState = self::VALUE_REPLACED;
         $this->phpVariable = null;
@@ -181,7 +184,7 @@ class PHPTAL_Dom_Attr
     /**
      * if value was overwritten with variable, get its name
      */
-    function getOverwrittenVariableName()
+    public function getOverwrittenVariableName()
     {
         return $this->phpVariable;
     }
@@ -189,7 +192,7 @@ class PHPTAL_Dom_Attr
     /**
      * whether getValueEscaped() returns real value or PHP code
      */
-    function getReplacedState()
+    public function getReplacedState()
     {
         return $this->replacedState;
     }

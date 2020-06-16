@@ -19,5 +19,3 @@
 class PHPTAL_Exception extends Exception
 {
 }
-
-

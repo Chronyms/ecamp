@@ -286,4 +286,3 @@ $diff='';
 $file='dejavuserifb.z';
 $ctg='dejavuserifb.ctg.z';
 $originalsize=287060;
-?>

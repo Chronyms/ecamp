@@ -123,10 +123,8 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
      *
      * @param PHPTAL $phptal instance
      */
-    final function setPHPTAL(PHPTAL $phptal)
+    final public function setPHPTAL(PHPTAL $phptal)
     {
         $this->phptal = $phptal;
     }
 }
-
-

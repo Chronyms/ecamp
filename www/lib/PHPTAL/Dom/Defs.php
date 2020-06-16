@@ -119,7 +119,9 @@ class PHPTAL_Dom_Defs
      */
     public function isValidAttributeNS($namespace_uri, $local_name)
     {
-        if (!$this->isHandledNamespace($namespace_uri)) return false;
+        if (!$this->isHandledNamespace($namespace_uri)) {
+            return false;
+        }
 
         $attrs = $this->namespaces_by_uri[$namespace_uri]->getAttributes();
         return isset($attrs[$local_name]);

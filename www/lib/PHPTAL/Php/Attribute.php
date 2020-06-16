@@ -39,14 +39,14 @@ abstract class PHPTAL_Php_Attribute
     /**
      * Called before element printing.
      */
-    abstract function before(PHPTAL_Php_CodeWriter $codewriter);
+    abstract public function before(PHPTAL_Php_CodeWriter $codewriter);
 
     /**
      * Called after element printing.
      */
-    abstract function after(PHPTAL_Php_CodeWriter $codewriter);
+    abstract public function after(PHPTAL_Php_CodeWriter $codewriter);
 
-    function __construct(PHPTAL_Dom_Element $phpelement, $expression)
+    public function __construct(PHPTAL_Dom_Element $phpelement, $expression)
     {
         $this->expression = $expression;
         $this->phpelement = $phpelement;
@@ -76,10 +76,11 @@ abstract class PHPTAL_Php_Attribute
 
     protected function doEchoAttribute(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
-        if ($this->_echoType === self::ECHO_TEXT)
+        if ($this->_echoType === self::ECHO_TEXT) {
             $codewriter->doEcho($code);
-        else
+        } else {
             $codewriter->doEchoRaw($code);
+        }
     }
 
     protected function parseSetExpression($exp)
@@ -95,4 +96,3 @@ abstract class PHPTAL_Php_Attribute
 
     protected $_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
 }
-

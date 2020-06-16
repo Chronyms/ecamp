@@ -23,7 +23,10 @@ abstract class PHPTAL_Dom_Node
 {
     public $parentNode;
 
-    private $value_escaped, $source_file, $source_line, $encoding;
+    private $value_escaped;
+    private $source_file;
+    private $source_line;
+    private $encoding;
 
     public function __construct($value_escaped, $encoding)
     {
@@ -59,7 +62,7 @@ abstract class PHPTAL_Dom_Node
     /**
      * depends on node type. Value will be escaped according to context that node comes from.
      */
-    function getValueEscaped()
+    public function getValueEscaped()
     {
         return $this->value_escaped;
     }
@@ -70,7 +73,7 @@ abstract class PHPTAL_Dom_Node
      *
      * @param string $value_escaped new content
      */
-    function setValueEscaped($value_escaped)
+    public function setValueEscaped($value_escaped)
     {
         $this->value_escaped = $value_escaped;
     }
@@ -79,7 +82,7 @@ abstract class PHPTAL_Dom_Node
     /**
      * get value as plain text. Depends on node type.
      */
-    function getValue()
+    public function getValue()
     {
         return html_entity_decode($this->getValueEscaped(), ENT_QUOTES, $this->encoding);
     }
@@ -95,11 +98,10 @@ abstract class PHPTAL_Dom_Node
     /**
      * use CodeWriter to compile this element to PHP code
      */
-    public abstract function generateCode(PHPTAL_Php_CodeWriter $gen);
+    abstract public function generateCode(PHPTAL_Php_CodeWriter $gen);
 
-    function __toString()
+    public function __toString()
     {
         return " “".$this->getValue()."” ";
     }
 }
-

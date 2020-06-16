@@ -379,7 +379,9 @@ class PHPTAL
         $enc = strtoupper($enc);
         if ($enc != $this->_encoding) {
             $this->_encoding = $enc;
-            if ($this->_translator) $this->_translator->setEncoding($enc);
+            if ($this->_translator) {
+                $this->_translator->setEncoding($enc);
+            }
 
             $this->resetPrepared();
         }
@@ -548,7 +550,7 @@ class PHPTAL
     private function getPreFiltersCacheId()
     {
         $cacheid = '';
-        foreach($this->getPreFilters() as $key => $prefilter) {
+        foreach ($this->getPreFilters() as $key => $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 $cacheid .= $key.$prefilter->getCacheId();
             } elseif ($prefilter instanceof PHPTAL_Filter) {
@@ -569,7 +571,7 @@ class PHPTAL
     {
         $prefilters = $this->getPreFilters();
 
-        foreach($prefilters as $prefilter) {
+        foreach ($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 $prefilter->setPHPTAL($this);
             }
@@ -652,8 +654,7 @@ class PHPTAL
      */
     public function execute()
     {
-        try
-        {
+        try {
             if (!$this->_prepared) {
                 // includes generated template PHP code
                 $this->prepare();
@@ -666,9 +667,7 @@ class PHPTAL
                 ob_start();
                 $templateFunction($this, $this->_context);
                 $res = ob_get_clean();
-            }
-            catch (Exception $e)
-            {
+            } catch (Exception $e) {
                 ob_end_clean();
                 throw $e;
             }
@@ -686,9 +685,7 @@ class PHPTAL
             if ($this->_postfilter) {
                 return $this->_postfilter->filter($res);
             }
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             PHPTAL_ExceptionHandler::handleException($e, $this->getEncoding());
         }
 
@@ -717,9 +714,7 @@ class PHPTAL
 
             $templateFunction = $this->getFunctionName();
             $templateFunction($this, $this->_context);
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             PHPTAL_ExceptionHandler::handleException($e, $this->getEncoding());
         }
     }
@@ -774,14 +769,13 @@ class PHPTAL
             }
 
             $fun($tpl, $this);
-
         } else {
             // call local macro
             $fun = $local_tpl->getFunctionName() . '_' . strtr($path, "-", "_");
             if (!function_exists($fun)) {
                 throw new PHPTAL_MacroMissingException("Macro '$path' is not defined", $local_tpl->_source->getRealPath());
             }
-            $fun( $local_tpl, $this);
+            $fun($local_tpl, $this);
         }
     }
 
@@ -835,8 +829,7 @@ class PHPTAL
                 ob_start();
                 try {
                     eval("?>\n".$result);
-                }
-                catch(Exception $e) {
+                } catch (Exception $e) {
                     ob_end_clean();
                     throw $e;
                 }
@@ -845,11 +838,14 @@ class PHPTAL
                     $msg = str_replace('eval()\'d code', $this->getCodePath(), ob_get_clean());
 
                     // greedy .* ensures last match
-                    if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
+                    if (preg_match('/.*on line (\d+)$/m', $msg, $m)) {
+                        $line=$m[1];
+                    } else {
+                        $line=0;
+                    }
                     throw new PHPTAL_TemplateException(trim($msg), $this->getCodePath(), $line);
                 }
                 ob_end_clean();
-
             } else {
                 // eval trick is used only on first run,
                 // just in case it causes any problems with opcode accelerators
@@ -939,7 +935,9 @@ class PHPTAL
         $cacheFiles = glob($filename . '?*');
         if ($cacheFiles) {
             foreach ($cacheFiles as $file) {
-                if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
+                if (substr($file, 0, strlen($filename)) !== $filename) {
+                    continue;
+                } // safety net
                 @unlink($file);
             }
         }
@@ -956,7 +954,9 @@ class PHPTAL
      */
     public function getCodePath()
     {
-        if (!$this->_codeFile) $this->setCodeFile();
+        if (!$this->_codeFile) {
+            $this->setCodeFile();
+        }
         return $this->_codeFile;
     }
 
@@ -966,27 +966,28 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-       // function name is used as base for caching, so it must be unique for
-       // every combination of settings that changes code in compiled template
+        // function name is used as base for caching, so it must be unique for
+        // every combination of settings that changes code in compiled template
 
-       if (!$this->_functionName) {
+        if (!$this->_functionName) {
 
             // just to make tempalte name recognizable
             $basename = preg_replace('/\.[a-z]{3,5}$/', '', basename($this->_source->getRealPath()));
             $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $basename), "_"), 0, 20);
 
-            $hash = md5(PHPTAL_VERSION . PHP_VERSION
+            $hash = md5(
+                PHPTAL_VERSION . PHP_VERSION
                     . $this->_source->getRealPath()
                     . $this->getEncoding()
                     . $this->getPrefiltersCacheId()
                     . $this->getOutputMode(),
-                    true
-                    );
+                true
+            );
 
             // uses base64 rather than hex to make filename shorter.
             // there is loss of some bits due to name constraints and case-insensivity,
             // but that's still over 110 bits in addition to basename and timestamp.
-            $hash = strtr(rtrim(base64_encode($hash),"="),"+/=","_A_");
+            $hash = strtr(rtrim(base64_encode($hash), "="), "+/=", "_A_");
 
             $this->_functionName = $this->getFunctionNamePrefix($this->_source->getLastModifiedTime()) .
                                    $basename . '__' . $hash;
@@ -1092,7 +1093,7 @@ class PHPTAL
         $data = $this->_source->getData();
 
         $prefilters = $this->getPreFilterInstances();
-        foreach($prefilters as $prefilter) {
+        foreach ($prefilters as $prefilter) {
             $data = $prefilter->filter($data);
         }
 
@@ -1102,9 +1103,9 @@ class PHPTAL
         $builder = new PHPTAL_Dom_PHPTALDocumentBuilder();
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
-        foreach($prefilters as $prefilter) {
+        foreach ($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
-                if ($prefilter->filterDOM($tree) !== NULL) {
+                if ($prefilter->filterDOM($tree) !== null) {
                     throw new PHPTAL_ConfigurationException("Don't return value from filterDOM()");
                 }
             }
@@ -1187,7 +1188,9 @@ class PHPTAL
             $class = strtr($class, '\\', '_');
         }
 
-        if (substr($class, 0, 7) !== 'PHPTAL_') return;
+        if (substr($class, 0, 7) !== 'PHPTAL_') {
+            return;
+        }
 
         $path = dirname(__FILE__) . strtr("_".$class, "_", DIRECTORY_SEPARATOR) . '.php';
 

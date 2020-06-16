@@ -36,7 +36,7 @@
  */
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 {
-    static $ALLOWED_ATTRIBUTES = array(
+    public static $ALLOWED_ATTRIBUTES = array(
         'fill-slot'=>'http://xml.zope.org/namespaces/metal',
         'define-macro'=>'http://xml.zope.org/namespaces/metal',
         'define'=>'http://xml.zope.org/namespaces/tal',
@@ -52,14 +52,20 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 
         $macroname = strtr($this->expression, '-', '_');
 
-	// throw error if attempting to define and use macro at same time
-	// [should perhaps be a TemplateException? but I don't know how to set that up...]
-	if ($defineAttr = $this->phpelement->getAttributeNodeNS(
-		'http://xml.zope.org/namespaces/metal', 'define-macro')) {
-		if ($defineAttr->getValue() == $macroname) 
-            		throw new PHPTAL_TemplateException("Cannot simultaneously define and use macro '$macroname'",
-                		$this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());			
-	}
+        // throw error if attempting to define and use macro at same time
+        // [should perhaps be a TemplateException? but I don't know how to set that up...]
+        if ($defineAttr = $this->phpelement->getAttributeNodeNS(
+            'http://xml.zope.org/namespaces/metal',
+            'define-macro'
+        )) {
+            if ($defineAttr->getValue() == $macroname) {
+                throw new PHPTAL_TemplateException(
+                    "Cannot simultaneously define and use macro '$macroname'",
+                    $this->phpelement->getSourceFile(),
+                    $this->phpelement->getSourceLine()
+                );
+            }
+        }
 
         // local macro (no filename specified) and non dynamic macro name
         // can be called directly if it's a known function (just generated or seen in previous compilation)

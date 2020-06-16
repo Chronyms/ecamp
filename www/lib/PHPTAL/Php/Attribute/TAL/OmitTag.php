@@ -52,7 +52,6 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
         if (trim($this->expression) == '') {
             $this->phpelement->headFootDisabled = true;
         } else {
-
             $this->varname = $codewriter->createTempVariable();
 
             // print tag header/foot only if condition is false
@@ -64,7 +63,8 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if ($this->varname) $codewriter->recycleTempVariable($this->varname);
+        if ($this->varname) {
+            $codewriter->recycleTempVariable($this->varname);
+        }
     }
 }
-

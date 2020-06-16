@@ -55,4 +55,3 @@ function phptal_tales($expression, $nothrow=false)
 {
     return PHPTAL_Php_TalesInternal::compileToPHPExpressions($expression, $nothrow);
 }
-

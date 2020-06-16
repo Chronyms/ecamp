@@ -34,7 +34,10 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
         $escape = true;
         $this->_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
         if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/', $this->expression, $m)) {
-            if ($m[1]=='structure') { $escape=false; $this->_echoType = PHPTAL_Php_Attribute::ECHO_STRUCTURE; }
+            if ($m[1]=='structure') {
+                $escape=false;
+                $this->_echoType = PHPTAL_Php_Attribute::ECHO_STRUCTURE;
+            }
             $this->expression = isset($m[2])?$m[2]:'';
         }
 
@@ -46,14 +49,18 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
             if ('' === trim($key)) {
-                throw new PHPTAL_TemplateException("Empty translation key",
-                            $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
+                throw new PHPTAL_TemplateException(
+                    "Empty translation key",
+                    $this->phpelement->getSourceFile(),
+                    $this->phpelement->getSourceLine()
+                );
             }
             $code = $codewriter->str($key);
         } else {
             $code = $codewriter->evaluateExpression($this->expression);
-            if (is_array($code))
+            if (is_array($code)) {
                 return $this->generateChainedContent($codewriter, $code);
+            }
 
             $code = $codewriter->evaluateExpression($this->expression);
         }
@@ -96,11 +103,12 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
                 if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n', 'name')) {
                     $result .= '${' . $attr->getValue() . '}';
                 } else {
-
                     if ($preserve_tags) {
                         $result .= '<'.$child->getQualifiedName();
                         foreach ($child->getAttributeNodes() as $attr) {
-                            if ($attr->getReplacedState() === PHPTAL_Dom_Attr::HIDDEN) continue;
+                            if ($attr->getReplacedState() === PHPTAL_Dom_Attr::HIDDEN) {
+                                continue;
+                            }
 
                             $result .= ' '.$attr->getQualifiedName().'="'.$attr->getValueEscaped().'"';
                         }
@@ -127,4 +135,3 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
         }
     }
 }
-

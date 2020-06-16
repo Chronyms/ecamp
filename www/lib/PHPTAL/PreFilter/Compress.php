@@ -31,7 +31,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
      */
     private $most_recent_text_node=null;
 
-    function filterDOM(PHPTAL_Dom_Element $root)
+    public function filterDOM(PHPTAL_Dom_Element $root)
     {
         // let xml:space=preserve preserve everything
         if ($root->getAttributeNS("http://www.w3.org/XML/1998/namespace", 'space') == 'preserve') {
@@ -41,7 +41,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         // tal:replace makes element behave like text
-        if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','replace')) {
+        if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal', 'replace')) {
             $this->most_recent_text_node = null;
             $this->had_space = false;
             return;
@@ -55,7 +55,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
         // mostly block-level elements
         // if element is conditional, it may not always break the line
-        $breaks_line = $no_spaces || ($this->breaksLine($root) && !$root->getAttributeNS('http://xml.zope.org/namespaces/tal','condition'));
+        $breaks_line = $no_spaces || ($this->breaksLine($root) && !$root->getAttributeNS('http://xml.zope.org/namespaces/tal', 'condition'));
 
         // start tag newline
         if ($breaks_line) {
@@ -64,7 +64,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
                 $this->most_recent_text_node = null;
             }
             $this->had_space = true;
-        } else if ($this->isInlineBlock($root)) {
+        } elseif ($this->isInlineBlock($root)) {
             // spaces around <img> must be kept
             $this->most_recent_text_node = null;
             $this->had_space = false;
@@ -77,7 +77,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             // HTML 5 (9.1.2.5) specifies quirk that a first *single* newline in <pre> can be removed
             if (count($root->childNodes) && $root->childNodes[0] instanceof PHPTAL_Dom_Text) {
                 if (preg_match('/^\n[^\n]/', $root->childNodes[0]->getValueEscaped())) {
-                    $root->childNodes[0]->setValueEscaped(substr($root->childNodes[0]->getValueEscaped(),1));
+                    $root->childNodes[0]->setValueEscaped(substr($root->childNodes[0]->getValueEscaped(), 1));
                 }
             }
             $this->findElementToFilter($root);
@@ -85,7 +85,6 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         foreach ($root->childNodes as $node) {
-
             if ($node instanceof PHPTAL_Dom_Text) {
                 // replaces runs of whitespace with ' '
                 $norm = $this->normalizeSpace($node->getValueEscaped(), $node->getEncoding());
@@ -101,13 +100,13 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
                 // collapsed whitespace-only nodes are ignored (otherwise trimming of most_recent_text_node would be useless)
                 if ($norm !== '') {
                     $this->most_recent_text_node = $node;
-                    $this->had_space = (substr($norm,-1) == ' ');
+                    $this->had_space = (substr($norm, -1) == ' ');
                 }
-            } else if ($node instanceof PHPTAL_Dom_Element) {
+            } elseif ($node instanceof PHPTAL_Dom_Element) {
                 $this->filterDOM($node);
-            } else if ($node instanceof PHPTAL_Dom_DocumentType || $node instanceof PHPTAL_Dom_XMLDeclaration) {
+            } elseif ($node instanceof PHPTAL_Dom_DocumentType || $node instanceof PHPTAL_Dom_XMLDeclaration) {
                 $this->had_space = true;
-            } else if ($node instanceof PHPTAL_Dom_ProcessingInstruction) {
+            } elseif ($node instanceof PHPTAL_Dom_ProcessingInstruction) {
                 // PI may output something requiring spaces
                 $this->most_recent_text_node = null;
                 $this->had_space = false;
@@ -115,12 +114,12 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         // repeated element may need trailing space.
-        if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
+        if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal', 'repeat')) {
             $this->most_recent_text_node = null;
         }
 
         // tal:content may replace element with something without space
-        if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','content')) {
+        if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal', 'content')) {
             $this->had_space = false;
             $this->most_recent_text_node = null;
         }
@@ -163,7 +162,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
     private function breaksLine(PHPTAL_Dom_Element $element)
     {
-        if ($element->getAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
+        if ($element->getAttributeNS('http://xml.zope.org/namespaces/metal', 'define-macro')) {
             return true;
         }
 
@@ -172,8 +171,8 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
-	        && $element->getNamespaceURI() !== '') {
-	        return false;
+            && $element->getNamespaceURI() !== '') {
+            return false;
         }
 
         return in_array($element->getLocalName(), self::$breaks_line);
@@ -189,8 +188,8 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
     private function isInlineBlock(PHPTAL_Dom_Element $element)
     {
         if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
-	        && $element->getNamespaceURI() !== '') {
-	        return false;
+            && $element->getNamespaceURI() !== '') {
+            return false;
         }
 
         return in_array($element->getLocalName(), self::$inline_blocks);
@@ -209,45 +208,46 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             $attrs_by_qname[$attrnode->getQualifiedName()] = $attrnode;
         }
 
-	if (count($attrs_by_qname) > 1) {
-		uksort($attrs_by_qname, array($this, 'compareQNames'));
-		$element->setAttributeNodes(array_values($attrs_by_qname));
-	}
+        if (count($attrs_by_qname) > 1) {
+            uksort($attrs_by_qname, array($this, 'compareQNames'));
+            $element->setAttributeNodes(array_values($attrs_by_qname));
+        }
     }
 
     /**
-	 * pre-defined order of attributes roughly by popularity
-	 */
-	private static $attributes_order = array(
+     * pre-defined order of attributes roughly by popularity
+     */
+    private static $attributes_order = array(
         'href','src','class','rel','type','title','width','height','alt','content','name','style','lang','id',
     );
 
-	/**
-	 * compare names according to $attributes_order array.
-	 * Elements that are not in array, are considered greater than all elements in array,
-	 * and are sorted alphabetically.
-	 */
-	private static function compareQNames($a, $b) {
-		$a_index = array_search($a, self::$attributes_order);
-		$b_index = array_search($b, self::$attributes_order);
+    /**
+     * compare names according to $attributes_order array.
+     * Elements that are not in array, are considered greater than all elements in array,
+     * and are sorted alphabetically.
+     */
+    private static function compareQNames($a, $b)
+    {
+        $a_index = array_search($a, self::$attributes_order);
+        $b_index = array_search($b, self::$attributes_order);
 
-		if ($a_index !== false && $b_index !== false) {
-			return $a_index - $b_index;
-		}
-		if ($a_index === false && $b_index === false) {
-			return strcmp($a, $b);
-		}
-		return ($a_index === false) ? 1 : -1;
-	}
+        if ($a_index !== false && $b_index !== false) {
+            return $a_index - $b_index;
+        }
+        if ($a_index === false && $b_index === false) {
+            return strcmp($a, $b);
+        }
+        return ($a_index === false) ? 1 : -1;
+    }
 
     /**
      * HTML5 doesn't care about boilerplate
      */
-	private function elementSpecificOptimizations(PHPTAL_Dom_Element $element)
-	{
-	    if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
-	     && $element->getNamespaceURI() !== '') {
-	        return;
+    private function elementSpecificOptimizations(PHPTAL_Dom_Element $element)
+    {
+        if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
+         && $element->getNamespaceURI() !== '') {
+            return;
         }
 
         if ($this->getPHPTAL()->getOutputMode() !== PHPTAL::HTML5) {
@@ -255,27 +255,25 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         // <meta charset>
-	    if ('meta' === $element->getLocalName() &&
-	        $element->getAttributeNS('','http-equiv') === 'Content-Type') {
-	            $element->removeAttributeNS('','http-equiv');
-	            $element->removeAttributeNS('','content');
-	            $element->setAttributeNS('','charset',strtolower($this->getPHPTAL()->getEncoding()));
-        }
-        elseif (('link' === $element->getLocalName() && $element->getAttributeNS('','rel') === 'stylesheet') ||
+        if ('meta' === $element->getLocalName() &&
+            $element->getAttributeNS('', 'http-equiv') === 'Content-Type') {
+            $element->removeAttributeNS('', 'http-equiv');
+            $element->removeAttributeNS('', 'content');
+            $element->setAttributeNS('', 'charset', strtolower($this->getPHPTAL()->getEncoding()));
+        } elseif (('link' === $element->getLocalName() && $element->getAttributeNS('', 'rel') === 'stylesheet') ||
             ('style' === $element->getLocalName())) {
             // There's only one type of stylesheets that works.
-            $element->removeAttributeNS('','type');
-
+            $element->removeAttributeNS('', 'type');
         } elseif ('script' === $element->getLocalName()) {
-            $element->removeAttributeNS('','language');
+            $element->removeAttributeNS('', 'language');
 
             // Only remove type that matches default. E4X, vbscript, coffeescript, etc. must be preserved
-            $type = $element->getAttributeNS('','type');
+            $type = $element->getAttributeNS('', 'type');
             $is_std = preg_match('/^(?:text|application)\/(?:ecma|java)script(\s*;\s*charset\s*=\s*[^;]*)?$/', $type);
 
             // Remote scripts should have type specified in HTTP headers.
-            if ($is_std || $element->getAttributeNS('','src')) {
-                $element->removeAttributeNS('','type');
+            if ($is_std || $element->getAttributeNS('', 'src')) {
+                $element->removeAttributeNS('', 'type');
             }
         }
     }

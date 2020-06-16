@@ -101,7 +101,7 @@ class PHPTAL_Context
      *
      * @return void
      */
-    public function setDocType($doctype,$called_from_macro)
+    public function setDocType($doctype, $called_from_macro)
     {
         // FIXME: this is temporary workaround for problem of DOCTYPE disappearing in cloned PHPTAL object (because clone keeps _parentContext)
         if (!$this->_docType) {
@@ -110,14 +110,13 @@ class PHPTAL_Context
 
         if ($this->_parentContext) {
             $this->_parentContext->setDocType($doctype, $called_from_macro);
-        } else if ($this->_echoDeclarations) {
+        } elseif ($this->_echoDeclarations) {
             if (!$called_from_macro) {
                 echo $doctype;
             } else {
                 throw new PHPTAL_ConfigurationException("Executed macro in file with DOCTYPE when using echoExecute(). This is not supported yet. Remove DOCTYPE or use PHPTAL->execute().");
             }
-        }
-        else if (!$this->_docType) {
+        } elseif (!$this->_docType) {
             $this->_docType = $doctype;
         }
     }
@@ -142,13 +141,13 @@ class PHPTAL_Context
 
         if ($this->_parentContext) {
             $this->_parentContext->setXmlDeclaration($xmldec, $called_from_macro);
-        } else if ($this->_echoDeclarations) {
+        } elseif ($this->_echoDeclarations) {
             if (!$called_from_macro) {
                 echo $xmldec."\n";
             } else {
                 throw new PHPTAL_ConfigurationException("Executed macro in file with XML declaration when using echoExecute(). This is not supported yet. Remove XML declaration or use PHPTAL->execute().");
             }
-        } else if (!$this->_xmlDeclaration) {
+        } elseif (!$this->_xmlDeclaration) {
             $this->_xmlDeclaration = $xmldec;
         }
     }
@@ -190,7 +189,7 @@ class PHPTAL_Context
             ob_start();
             call_user_func($this->_slots[$key][0], $this->_slots[$key][1], $this->_slots[$key][2]);
             return ob_get_clean();
-        } else if ($this->_parentContext) {
+        } elseif ($this->_parentContext) {
             return $this->_parentContext->getSlot($key);
         }
     }
@@ -210,7 +209,7 @@ class PHPTAL_Context
             } else {
                 call_user_func($this->_slots[$key][0], $this->_slots[$key][1], $this->_slots[$key][2]);
             }
-        } else if ($this->_parentContext) {
+        } elseif ($this->_parentContext) {
             return $this->_parentContext->echoSlot($key);
         }
     }
@@ -317,7 +316,9 @@ class PHPTAL_Context
     {
         if ($current !== $path) {
             $pathinfo = " (in path '.../$path')";
-        } else $pathinfo = '';
+        } else {
+            $pathinfo = '';
+        }
 
         if (!empty($basename)) {
             $basename = "'" . $basename . "' ";
@@ -353,7 +354,9 @@ class PHPTAL_Context
     public static function path($base, $path, $nothrow=false)
     {
         if ($base === null) {
-            if ($nothrow) return null;
+            if ($nothrow) {
+                return null;
+            }
             PHPTAL_Context::pathError($base, $path, $path, $path);
         }
 
@@ -408,12 +411,11 @@ class PHPTAL_Context
 
                 // magic method call
                 if (method_exists($base, '__call')) {
-                    try
-                    {
+                    try {
                         $base = $base->__call($current, array());
                         continue;
+                    } catch (BadMethodCallException $e) {
                     }
-                    catch(BadMethodCallException $e) {}
                 }
 
                 if ($nothrow) {
@@ -437,8 +439,9 @@ class PHPTAL_Context
                     continue;
                 }
 
-                if ($nothrow)
+                if ($nothrow) {
                     return null;
+                }
 
                 PHPTAL_Context::pathError($base, $path, $current, $prev);
             }
@@ -460,8 +463,9 @@ class PHPTAL_Context
 
             // if this point is reached, then the part cannot be resolved
 
-            if ($nothrow)
+            if ($nothrow) {
                 return null;
+            }
 
             PHPTAL_Context::pathError($base, $path, $current, $prev);
         }

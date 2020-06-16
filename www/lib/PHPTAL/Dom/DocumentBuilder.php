@@ -24,7 +24,8 @@ abstract class PHPTAL_Dom_DocumentBuilder
     protected $_stack;   /* array<PHPTAL_Dom_Node> */
     protected $_current; /* PHPTAL_Dom_Node */
 
-    protected $file, $line;
+    protected $file;
+    protected $line;
 
     public function __construct()
     {
@@ -55,9 +56,9 @@ abstract class PHPTAL_Dom_DocumentBuilder
 
     public function setSource($file, $line)
     {
-        $this->file = $file; $this->line = $line;
+        $this->file = $file;
+        $this->line = $line;
     }
 
     abstract public function setEncoding($encoding);
 }
-

@@ -30,9 +30,7 @@
  * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Replace
-extends PHPTAL_Php_Attribute
-implements PHPTAL_Php_TalesChainReader
+class PHPTAL_Php_Attribute_TAL_Replace extends PHPTAL_Php_Attribute implements PHPTAL_Php_TalesChainReader
 {
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -73,7 +71,9 @@ implements PHPTAL_Php_TalesChainReader
     private function replaceByChainedExpression(PHPTAL_Php_CodeWriter $codewriter, $expArray)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor(
-            $codewriter, $expArray, $this
+            $codewriter,
+            $expArray,
+            $this
         );
     }
 
@@ -114,4 +114,3 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->generateSurroundFoot($codewriter);
     }
 }
-

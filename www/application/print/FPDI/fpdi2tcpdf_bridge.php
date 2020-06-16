@@ -21,14 +21,15 @@
  * This class is used as a bridge between TCPDF and FPDI
  * and will create the possibility to use both FPDF and TCPDF
  * via one FPDI version.
- * 
+ *
  * We'll simply remap TCPDF to FPDF again.
- * 
+ *
  * It'll be loaded and extended by FPDF_TPL.
  */
-class FPDF extends TCPDF_ADDONS {
-    
-    function __get($name) {
+class FPDF extends TCPDF_ADDONS
+{
+    public function __get($name)
+    {
         switch ($name) {
             case 'PDFVersion':
                 return $this->PDFVersion;
@@ -40,7 +41,8 @@ class FPDF extends TCPDF_ADDONS {
         }
     }
 
-    function __set($name, $value) {
+    public function __set($name, $value)
+    {
         switch ($name) {
             case 'PDFVersion':
                 $this->PDFVersion = $value;
@@ -56,32 +58,33 @@ class FPDF extends TCPDF_ADDONS {
      *
      * @param array $value
      */
-    function pdf_write_value(&$value) {
+    public function pdf_write_value(&$value)
+    {
         switch ($value[0]) {
-    		case PDF_TYPE_STRING :
-				if ($this->encrypted) {
-				    $value[1] = $this->_unescape($value[1]);
+            case PDF_TYPE_STRING:
+                if ($this->encrypted) {
+                    $value[1] = $this->_unescape($value[1]);
                     $value[1] = $this->_RC4($this->_objectkey($this->_current_obj_id), $value[1]);
-                 	$value[1] = $this->_escape($value[1]);
-                } 
-    			break;
-    			
-			case PDF_TYPE_STREAM :
-			    if ($this->encrypted) {
-			        $value[2][1] = $this->_RC4($this->_objectkey($this->_current_obj_id), $value[2][1]);
+                    $value[1] = $this->_escape($value[1]);
                 }
                 break;
                 
-            case PDF_TYPE_HEX :
-            	if ($this->encrypted) {
-                	$value[1] = $this->hex2str($value[1]);
-                	$value[1] = $this->_RC4($this->_objectkey($this->_current_obj_id), $value[1]);
-                    
-                	// remake hexstring of encrypted string
-    				$value[1] = $this->str2hex($value[1]);
+            case PDF_TYPE_STREAM:
+                if ($this->encrypted) {
+                    $value[2][1] = $this->_RC4($this->_objectkey($this->_current_obj_id), $value[2][1]);
                 }
                 break;
-    	}
+                
+            case PDF_TYPE_HEX:
+                if ($this->encrypted) {
+                    $value[1] = $this->hex2str($value[1]);
+                    $value[1] = $this->_RC4($this->_objectkey($this->_current_obj_id), $value[1]);
+                    
+                    // remake hexstring of encrypted string
+                    $value[1] = $this->str2hex($value[1]);
+                }
+                break;
+        }
     }
     
     /**
@@ -90,7 +93,8 @@ class FPDF extends TCPDF_ADDONS {
      * @param string $s
      * @return string
      */
-    function _unescape($s) {
+    public function _unescape($s)
+    {
         $out = '';
         for ($count = 0, $n = strlen($s); $count < $n; $count++) {
             if ($s[$count] != '\\' || $count == $n-1) {
@@ -118,8 +122,9 @@ class FPDF extends TCPDF_ADDONS {
                         $out .= chr(0x0A);
                         break;
                     case "\r":
-                        if ($count != $n-1 && $s[$count+1] == "\n")
+                        if ($count != $n-1 && $s[$count+1] == "\n") {
                             $count++;
+                        }
                         break;
                     case "\n":
                         break;
@@ -135,8 +140,8 @@ class FPDF extends TCPDF_ADDONS {
                                 
                                 if (ord($s[$count+1]) >= ord('0') &&
                                     ord($s[$count+1]) <= ord('9')) {
-                                    $oct .= $s[++$count];    
-                                }                            
+                                    $oct .= $s[++$count];
+                                }
                             }
                             
                             $out .= chr(octdec($oct));
@@ -155,8 +160,9 @@ class FPDF extends TCPDF_ADDONS {
      * @param string $hex
      * @return string
      */
-    function hex2str($hex) {
-    	return pack('H*', str_replace(array("\r", "\n", ' '), '', $hex));
+    public function hex2str($hex)
+    {
+        return pack('H*', str_replace(array("\r", "\n", ' '), '', $hex));
     }
     
     /**
@@ -165,7 +171,8 @@ class FPDF extends TCPDF_ADDONS {
      * @param string $str
      * @return string
      */
-    function str2hex($str) {
+    public function str2hex($str)
+    {
         return current(unpack('H*', $str));
     }
 }

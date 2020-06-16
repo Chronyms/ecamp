@@ -19,10 +19,7 @@
  */
 
 
-	$_Q = array(
-		"camp" 		=> "SELECT * FROM camp WHERE 1",
-		"category"	=> "SELECT * FROM category WHERE 1"
-	);
-	
-	
-?>
+    $_Q = array(
+        "camp" 		=> "SELECT * FROM camp WHERE 1",
+        "category"	=> "SELECT * FROM category WHERE 1"
+    );

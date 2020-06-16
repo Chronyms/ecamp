@@ -48,4 +48,3 @@ class PHPTAL_StringSource implements PHPTAL_Source
         return $this->_realpath;
     }
 }
-

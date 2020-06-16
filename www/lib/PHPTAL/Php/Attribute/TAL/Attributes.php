@@ -35,9 +35,7 @@
  * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Attributes
-extends PHPTAL_Php_Attribute
-implements PHPTAL_Php_TalesChainReader
+class PHPTAL_Php_Attribute_TAL_Attributes extends PHPTAL_Php_Attribute implements PHPTAL_Php_TalesChainReader
 {
     /** before creates several variables that need to be freed in after */
     private $vars_to_recycle = array();
@@ -115,10 +113,11 @@ implements PHPTAL_Php_TalesChainReader
 
         $codewriter->doIf("null !== ($attkey = ($code))");
 
-        if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE)
+        if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE) {
             $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->escapeCode($attkey).".'\"'");
-        else
+        } else {
             $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->stringifyCode($attkey).".'\"'");
+        }
 
         $codewriter->doElse();
         $codewriter->doSetVar($attkey, "''");
@@ -166,7 +165,9 @@ implements PHPTAL_Php_TalesChainReader
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        foreach ($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
+        foreach ($this->vars_to_recycle as $var) {
+            $codewriter->recycleTempVariable($var);
+        }
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
@@ -202,12 +203,12 @@ implements PHPTAL_Php_TalesChainReader
         }
         $executor->doIf($condition);
 
-        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
+        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE) {
             $value = $codewriter->stringifyCode($this->_attkey);
-        else
+        } else {
             $value = $codewriter->escapeCode($this->_attkey);
+        }
 
         $codewriter->doSetVar($this->_attkey, $codewriter->str(" {$this->_attribute}=\"").".$value.'\"'");
     }
 }
-

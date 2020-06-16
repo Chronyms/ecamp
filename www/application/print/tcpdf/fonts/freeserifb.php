@@ -251,4 +251,3 @@ $diff='';
 $file='freeserifb.z';
 $ctg='freeserifb.ctg.z';
 $originalsize=397068;
-?>

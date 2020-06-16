@@ -23,36 +23,37 @@
   # Filename:     logout.php
   # Beschreibung: Üernimmt den Logout-Vorgang
   #
-  # ToDo:  - 
+  # ToDo:  -
   #
-  	include("./config/config.php");
-	include("lib/mysql.php");
-	include("./class.php");
-	db_connect();
-	
-	$_user 		= new user;
-	$_camp 		= new camp;
-	$_user_camp = new user_camp;
-	
-	include("module/auth/check_login.php");
-	
-	# Session-Variablen löchen
-	$_SESSION = array();
-	session_unset();
+    include("./config/config.php");
+    include("lib/mysql.php");
+    include("./class.php");
+    db_connect();
+    
+    $_user 		= new user;
+    $_camp 		= new camp;
+    $_user_camp = new user_camp;
+    
+    include("module/auth/check_login.php");
+    
+    # Session-Variablen löchen
+    $_SESSION = array();
+    session_unset();
   
-    # Cookie löchen  
-	setcookie(session_name(), '', time()-42000, '/');
-	setcookie('autologin', false, time()-42000, '/' );
-	setcookie('user_id', '', time()-42000, '/' );
-	setcookie('auth_key', '', time()-42000, '/' );
-	
-	# Session-Daten löchen
-	session_destroy();
-	
-	# zum Login weiterleiten
-	if(isset($_REQUEST['msg']))
-	{	header("Location: login.php?msg=".$_REQUEST['msg']);	}
-	else
-	{	header("Location: login.php");	}
+    # Cookie löchen
+    setcookie(session_name(), '', time()-42000, '/');
+    setcookie('autologin', false, time()-42000, '/');
+    setcookie('user_id', '', time()-42000, '/');
+    setcookie('auth_key', '', time()-42000, '/');
+    
+    # Session-Daten löchen
+    session_destroy();
+    
+    # zum Login weiterleiten
+    if (isset($_REQUEST['msg'])) {
+        header("Location: login.php?msg=".$_REQUEST['msg']);
+    } else {
+        header("Location: login.php");
+    }
 ?>
 

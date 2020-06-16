@@ -28,7 +28,7 @@ class PHPTAL_TalesRegistry
      *
      * @return PHPTAL_TalesRegistry
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         if (!self::$instance) {
             self::$instance = new PHPTAL_TalesRegistry();
@@ -90,7 +90,6 @@ class PHPTAL_TalesRegistry
         // Check if valid callback
 
         if (is_array($callback)) {
-
             $class = new ReflectionClass($callback[0]);
 
             if (!$class->isSubclassOf('PHPTAL_Tales')) {
@@ -104,7 +103,6 @@ class PHPTAL_TalesRegistry
             }
 
             // maybe we want to check the parameters the method takes
-
         } else {
             if (!function_exists($callback)) {
                 throw new PHPTAL_ConfigurationException('The function you are trying to register does not exist.');
@@ -182,4 +180,3 @@ class PHPTAL_TalesRegistry
      */
     private $_callbacks = array();
 }
-

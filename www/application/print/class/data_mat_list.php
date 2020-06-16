@@ -18,27 +18,23 @@
  * along with eCamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-	
-	class print_data_mat_list
-	{
-		
-		public $pid;
-		public $id;
-		public $camp_id;
-		public $camp;
-		public $name;
-		
-		
-		function __construct($data, $pid )
-		{
-			$this->pid			= $pid;
-			$this->id			= $data['id'];
-			$this->camp_id 		= $data['camp_id'];
-			$this->name			= $data['name'];
-			
-			$this->camp = $pid->camp;
-		}
-		
-	}
-	
-?>
+    
+    class print_data_mat_list
+    {
+        public $pid;
+        public $id;
+        public $camp_id;
+        public $camp;
+        public $name;
+        
+        
+        public function __construct($data, $pid)
+        {
+            $this->pid			= $pid;
+            $this->id			= $data['id'];
+            $this->camp_id 		= $data['camp_id'];
+            $this->name			= $data['name'];
+            
+            $this->camp = $pid->camp;
+        }
+    }

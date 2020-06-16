@@ -50,4 +50,3 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
         $codewriter->recycleTempVariable($this->var);
     }
 }
-

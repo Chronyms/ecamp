@@ -43,13 +43,17 @@ class PHPTAL_Php_CodeWriter
 
     public function createTempVariable()
     {
-        if (count($this->temp_recycling)) return array_shift($this->temp_recycling);
+        if (count($this->temp_recycling)) {
+            return array_shift($this->temp_recycling);
+        }
         return '$_tmp_'.(++$this->temp_var_counter);
     }
 
     public function recycleTempVariable($var)
     {
-        if (substr($var, 0, 6)!=='$_tmp_') throw new PHPTAL_Exception("Invalid variable recycled");
+        if (substr($var, 0, 6)!=='$_tmp_') {
+            throw new PHPTAL_Exception("Invalid variable recycled");
+        }
         $this->temp_recycling[] = $var;
     }
 
@@ -129,7 +133,9 @@ class PHPTAL_Php_CodeWriter
     {
         preg_match_all('/(?:[^;]+|;;)+/sm', $src, $array);
         $array = $array[0];
-        foreach ($array as &$a) $a = str_replace(';;', ';', $a);
+        foreach ($array as &$a) {
+            $a = str_replace(';;', ';', $a);
+        }
         return $array;
     }
 
@@ -165,16 +171,20 @@ class PHPTAL_Php_CodeWriter
 
     public function flushCode()
     {
-        if (count($this->_codeBuffer) == 0) return;
+        if (count($this->_codeBuffer) == 0) {
+            return;
+        }
 
         // special treatment for one code line
         if (count($this->_codeBuffer) == 1) {
             $codeLine = $this->_codeBuffer[0];
             // avoid adding ; after } and {
-            if (!preg_match('/\}\s*$|\{\s*$/', $codeLine))
-                $this->_result .= '<?php '.$codeLine."; ?>\n"; // PHP consumes newline
-            else
-                $this->_result .= '<?php '.$codeLine." ?>\n"; // PHP consumes newline
+            if (!preg_match('/\}\s*$|\{\s*$/', $codeLine)) {
+                $this->_result .= '<?php '.$codeLine."; ?>\n";
+            } // PHP consumes newline
+            else {
+                $this->_result .= '<?php '.$codeLine." ?>\n";
+            } // PHP consumes newline
             $this->_codeBuffer = array();
             return;
         }
@@ -193,7 +203,9 @@ class PHPTAL_Php_CodeWriter
 
     public function flushHtml()
     {
-        if (count($this->_htmlBuffer) == 0) return;
+        if (count($this->_htmlBuffer) == 0) {
+            return;
+        }
 
         $this->_result .= implode('', $this->_htmlBuffer);
         $this->_htmlBuffer = array();
@@ -289,7 +301,9 @@ class PHPTAL_Php_CodeWriter
     public function doEnd($expects = null)
     {
         if (!count($this->_segments)) {
-            if (!$expects) $expects = 'anything';
+            if (!$expects) {
+                $expects = 'anything';
+            }
             throw new PHPTAL_Exception("Bug: CodeWriter generated end of block without $expects open");
         }
 
@@ -305,12 +319,13 @@ class PHPTAL_Php_CodeWriter
             $functionCode = $this->_result;
             $this->popCodeWriterContext();
             $this->_result = $functionCode . $this->_result;
-        } elseif ($segment == 'try')
+        } elseif ($segment == 'try') {
             $this->pushCode('}');
-        elseif ($segment == 'catch')
+        } elseif ($segment == 'catch') {
             $this->pushCode('}');
-        else
+        } else {
             $this->pushCode("end$segment");
+        }
     }
 
     public function doTry()
@@ -362,14 +377,18 @@ class PHPTAL_Php_CodeWriter
 
     public function doEcho($code)
     {
-        if ($code === "''") return;
+        if ($code === "''") {
+            return;
+        }
         $this->flush();
         $this->pushCode('echo '.$this->escapeCode($code));
     }
 
     public function doEchoRaw($code)
     {
-        if ($code === "''") return;
+        if ($code === "''") {
+            return;
+        }
         $this->pushCode('echo '.$this->stringifyCode($code));
     }
 
@@ -385,7 +404,9 @@ class PHPTAL_Php_CodeWriter
 
     public function pushHTML($html)
     {
-        if ($html === "") return;
+        if ($html === "") {
+            return;
+        }
         $this->flushCode();
         $this->_htmlBuffer[] =  $html;
     }
@@ -402,7 +423,7 @@ class PHPTAL_Php_CodeWriter
      */
     public function str($string)
     {
-        return "'".strtr($string,array("'"=>'\\\'','\\'=>'\\\\'))."'";
+        return "'".strtr($string, array("'"=>'\\\'','\\'=>'\\\\'))."'";
     }
 
     public function escapeCode($code)
@@ -444,8 +465,7 @@ class PHPTAL_Php_CodeWriter
     {
         // FIXME: interpolation is done _after_ that function, so ${} must be forbidden for now
 
-        if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
-        {
+        if ($this->getEncoding() == 'UTF-8') { // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
             // regex excludes unicode control characters, all kinds of whitespace and unsafe characters
             // and trailing / to avoid confusion with self-closing syntax
             $unsafe_attr_regex = '/^$|[&=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]|\/$|\${/u';
@@ -508,4 +528,3 @@ class PHPTAL_Php_CodeWriter
     private $_doctype = "";
     private $_xmldeclaration = "";
 }
-

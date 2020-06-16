@@ -47,4 +47,3 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         $codewriter->pushCode($code);
     }
 }
-

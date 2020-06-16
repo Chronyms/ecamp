@@ -18,23 +18,21 @@
  * along with eCamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-	$type = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_REQUEST['type']);
-	$camp_id = $_camp->id;
+    $type = mysqli_real_escape_string($GLOBALS["___mysqli_ston"], $_REQUEST['type']);
+    $camp_id = $_camp->id;
 
-	if( ($type>=1) && ($type<=5) )
-	{
-		$sql = implode("",file("./template/application/aim/sql/course_aim_".$type.".sql"));
+    if (($type>=1) && ($type<=5)) {
+        $sql = implode("", file("./template/application/aim/sql/course_aim_".$type.".sql"));
 
-		eval ("\$sql = \"$sql\";");
-		$queries = explode(";",$sql);
-		
-		foreach( $queries as $query )
-		{
-			//echo $query."\n";
-			mysqli_query($GLOBALS["___mysqli_ston"], $query);
-			//echo mysql_error()."\n";
-		}
-	}
+        eval("\$sql = \"$sql\";");
+        $queries = explode(";", $sql);
+        
+        foreach ($queries as $query) {
+            //echo $query."\n";
+            mysqli_query($GLOBALS["___mysqli_ston"], $query);
+            //echo mysql_error()."\n";
+        }
+    }
 
-	header("Location:index.php?app=aim");
-	die();
+    header("Location:index.php?app=aim");
+    die();

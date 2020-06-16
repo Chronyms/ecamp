@@ -88,9 +88,18 @@ abstract class PHPTAL_NamespaceAttribute
         return $this->local_name;
     }
 
-    public function getPriority() { return $this->_priority; }
-    public function getNamespace() { return $this->_namespace; }
-    public function setNamespace(PHPTAL_Namespace $ns) { $this->_namespace = $ns; }
+    public function getPriority()
+    {
+        return $this->_priority;
+    }
+    public function getNamespace()
+    {
+        return $this->_namespace;
+    }
+    public function setNamespace(PHPTAL_Namespace $ns)
+    {
+        $this->_namespace = $ns;
+    }
 
     public function createAttributeHandler(PHPTAL_Dom_Element $tag, $expression)
     {

@@ -26,7 +26,7 @@ class PHPTAL_Php_State
     private $output_mode;
     private $phptal;
 
-    function __construct(PHPTAL $phptal)
+    public function __construct(PHPTAL $phptal)
     {
         $this->phptal = $phptal;
         $this->encoding = $phptal->getEncoding();
@@ -144,7 +144,7 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInString($string)
     {
-        return PHPTAL_Php_TalesInternal::parseString($string, false, ($this->getTalesMode() === 'tales') ? '' : 'php:' );
+        return PHPTAL_Php_TalesInternal::parseString($string, false, ($this->getTalesMode() === 'tales') ? '' : 'php:');
     }
 
     /**
@@ -152,8 +152,11 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInHTML($src)
     {
-        return preg_replace_callback('/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
-                                     array($this,'_interpolateTalesVarsInHTMLCallback'), $src);
+        return preg_replace_callback(
+            '/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
+            array($this,'_interpolateTalesVarsInHTMLCallback'),
+            $src
+        );
     }
 
     /**
@@ -171,8 +174,11 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInCDATA($src)
     {
-        return preg_replace_callback('/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
-                                     array($this,'_interpolateTalesVarsInCDATACallback'), $src);
+        return preg_replace_callback(
+            '/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
+            array($this,'_interpolateTalesVarsInCDATACallback'),
+            $src
+        );
     }
 
     /**
@@ -251,4 +257,3 @@ class PHPTAL_Php_State
         return 'phptal_tostring('.$php.')';
     }
 }
-

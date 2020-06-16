@@ -18,13 +18,13 @@
  * along with eCamp.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-	$_page->html->set('main_macro', $GLOBALS['tpl_dir'].'/global/content_box_fit.tpl/predefine');
-	$_page->html->set('box_content', $GLOBALS['tpl_dir'].'/application/db/integrity.tpl/integrity');
-	$_page->html->set('box_title', 'Integrity:');
+    $_page->html->set('main_macro', $GLOBALS['tpl_dir'].'/global/content_box_fit.tpl/predefine');
+    $_page->html->set('box_content', $GLOBALS['tpl_dir'].'/application/db/integrity.tpl/integrity');
+    $_page->html->set('box_title', 'Integrity:');
 
-	$subCampLength = array();
-	
-	$query = "	Select 
+    $subCampLength = array();
+    
+    $query = "	Select 
 					camp.id as camp_id, 
 					subcamp.id as subcamp_id, 
 					subcamp.length as subcamp_length, 
@@ -45,16 +45,17 @@
 					camp.id = subcamp.camp_id AND
 					days.subcamp_id = subcamp.id AND
 					subcamp.length != days.length";
-					
-	$result = mysqli_query($GLOBALS["___mysqli_ston"],  $query );
-	while( $error = mysqli_fetch_assoc( $result ) )
-	{	$subCampLength[] = $error;	}
+                    
+    $result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    while ($error = mysqli_fetch_assoc($result)) {
+        $subCampLength[] = $error;
+    }
 
-	$_page->html->set( 'subCampLength', $subCampLength );
+    $_page->html->set('subCampLength', $subCampLength);
 
-	$eventDetailSorting = array();
-	
-	$query = "	Select 
+    $eventDetailSorting = array();
+    
+    $query = "	Select 
 					event_id 
 				FROM 
 				(
@@ -71,9 +72,10 @@
 				WHERE 
 					dmax != dcount OR 
 					dsum != ( dcount*(dcount+1)/2 )";
-	
-	$result = mysqli_query($GLOBALS["___mysqli_ston"],  $query );
-	while( $error = mysqli_fetch_assoc( $result ) )
-	{	$eventDetailSorting[] = $error;	}
+    
+    $result = mysqli_query($GLOBALS["___mysqli_ston"], $query);
+    while ($error = mysqli_fetch_assoc($result)) {
+        $eventDetailSorting[] = $error;
+    }
 
-	$_page->html->set( 'eventDetailSorting', $eventDetailSorting );
+    $_page->html->set('eventDetailSorting', $eventDetailSorting);
